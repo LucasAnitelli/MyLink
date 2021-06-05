@@ -15,38 +15,71 @@ import {
   ButtonLinkText,
   ButtonLink,
 } from "./styles";
+import {
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Modal,
+} from "react-native";
+import { useState } from "react";
+import ModalLink from "../../components/ModalLink";
 
 export default function Home() {
+  const [input, setInput] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
+  function handleShortLink() {
+    setModalVisible(true);
+  }
+
   return (
-    <LinearGradient
-      colors={["#1ddbb9", "#132742"]}
-      style={{ flex: 1, justifyContent: "center" }}
-    >
-      <StatusBarPage barStyle="light-content" backgroundColor="#1ddbb9" />
-      <Menu />
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <LinearGradient
+        colors={["#1ddbb9", "#132742"]}
+        style={{ flex: 1, justifyContent: "center" }}
+      >
+        <StatusBarPage barStyle="light-content" backgroundColor="#1ddbb9" />
+        <Menu />
 
-      <ContainerLogo>
-        <Logo source={require("../../assets/Logo.png")} />
-      </ContainerLogo>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "android" ? "padding" : "position"}
+          enabled
+        >
+          <ContainerLogo>
+            <Logo source={require("../../assets/Logo.png")} />
+          </ContainerLogo>
 
-      <ContainerContent>
-        <Title>SujeitoLink</Title>
-        <SubTitle>Cole seu link para executar</SubTitle>
+          <ContainerContent>
+            <Title>SujeitoLink</Title>
+            <SubTitle>Cole seu link para executar</SubTitle>
 
-        <ContainerInput>
-          <BoxIcon>
-            <Feather name="link" size={22} color="#FFF" />
-          </BoxIcon>
-          <Input
-            placeholder="Cole seu link aqui..."
-            placeholderTextColor="white"
-          />
-        </ContainerInput>
+            <ContainerInput>
+              <BoxIcon>
+                <Feather name="link" size={22} color="#FFF" />
+              </BoxIcon>
+              <Input
+                placeholder="Cole seu link aqui..."
+                placeholderTextColor="white"
+                autoCapitalize="none"
+                autoCorrect={false}
+                KeyboardType="url"
+                value={input}
+                onChangeText={(text) => {
+                  setInput(text);
+                }}
+              />
+            </ContainerInput>
 
-        <ButtonLink>
-          <ButtonLinkText>Gerar Link</ButtonLinkText>
-        </ButtonLink>
-      </ContainerContent>
-    </LinearGradient>
+            <ButtonLink onPress={handleShortLink}>
+              <ButtonLinkText>Gerar Link</ButtonLinkText>
+            </ButtonLink>
+          </ContainerContent>
+        </KeyboardAvoidingView>
+        <Modal visible={modalVisible} transparent animationType="slide">
+          <ModalLink onClose={() => setModalVisible(false)} />
+        </Modal>
+      </LinearGradient>
+    </TouchableWithoutFeedback>
   );
 }
