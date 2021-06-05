@@ -1,6 +1,6 @@
 import React from "react";
 import Menu from "../../components/Menu";
-import { Container, Title, ListLinks } from "../../components/ModalLink/styles";
+import { Container, Title, ListLinks } from "./styles";
 import StatusBarPage from "../../components/StatusBarPage";
 import ListItem from "../../components/ListItem";
 
